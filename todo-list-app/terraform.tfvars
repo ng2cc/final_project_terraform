@@ -1,5 +1,5 @@
-REGION       = "us-east-1"
-PROJECT_NAME = "Todo-App-EKS"
+REGION       = "ap-northeast-1"
+PROJECT_NAME = "App-EKS"
 
 VPC_CIDR         = "192.168.0.0/16"
 PUB_SUB_1_A_CIDR = "192.168.0.0/18"

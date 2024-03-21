@@ -25,7 +25,7 @@ module "NAT-GW" {
 
 
 module "IAM" {
-  source = "../modules/IAM"
+  source       = "../modules/IAM"
   PROJECT_NAME = var.PROJECT_NAME
 }
 
