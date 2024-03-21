@@ -1,3 +1,4 @@
+#  Terraform에서 출력을 사용하여 생성된 리소스의 속성을 사용자에게 제공하는 것
 output "REGION" {
   value = var.REGION
 }
@@ -24,5 +25,5 @@ output "PRI_SUB_4_B_ID" {
   value = aws_subnet.pri-sub-4-b.id
 }
 output "IGW_ID" {
-    value = aws_internet_gateway.internet_gateway
+  value = aws_internet_gateway.internet_gateway
 }

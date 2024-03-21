@@ -1,10 +1,13 @@
+# Terraform을 사용하여 AWS에서 EKS 클러스터 및 노드 그룹에 필요한 IAM역할 및 정책을 설정
+
+
+# Amazon EKS 클러스터를 관리하기 위한 IAM 역할을 정의
+# eks.amazonaws.com 서비스에 의해 사용될 수 있도록 설정됩니다.
+# 이 역할은 Amazon EKS가 AWS 리소스에 액세스하고 Kubernetes 클러스터를 생성하는 데 필요한 권한을 제공
 resource "aws_iam_role" "eks_cluster_role" {
   # The name of the role
   name = "${var.PROJECT_NAME}-EKS-role"
 
-  # The policy that grants an entity permission to assume the role.
-  # Used to access AWS resources that you might not normally have access to.
-  # The role that Amazon EKS will use to create AWS resources for Kubernetes clusters
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -22,26 +25,28 @@ POLICY
 }
 
 
-# Resource: aws_iam_role_policy_attachment
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment
+# 앞서 생성한 IAM 역할에 AmazonEKSClusterPolicy라는 AWS 관리 정책을 연결
+# 이 정책은 Amazon EKS 클러스터에 필요한 권한을 부여
 
 resource "aws_iam_role_policy_attachment" "amazon_eks_cluster_policy" {
-  # The ARN of the policy you want to apply
-  # https://github.com/SummitRoute/aws_managed_policies/blob/master/policies/AmazonEKSClusterPolicy
+
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 
   # The role the policy should be applied to
   role = aws_iam_role.eks_cluster_role.name
 }
 
+
+# 앞서 생성한 IAM 역할에 Elastic Load Balancing 서비스에
+# 대한 완전한 액세스 권한을 부여하는 정책을 연결
 resource "aws_iam_role_policy_attachment" "elastic_load_balancing_full_access" {
   policy_arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"
   role       = aws_iam_role.eks_cluster_role.name
 }
 
 
-# Resource: aws_iam_role
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role
+# 하위 나머지 코드 부분은 EKS 노드 그룹에 필요한 IAM 역할과 정책을 정의하고, 해당 역할에 정책을 연결하는데 사용됩니다.
+# 이러한 정책은 EKS 노드 그룹이 필요한 권한을 갖도록 합니다.
 
 # Create IAM role for EKS Node Group
 resource "aws_iam_role" "nodes_general" {

@@ -1,3 +1,5 @@
+# Terraform을 사용하여 Amazon EKS 클러스터를 프로비저닝
+# 모듈을 사용하여 EKS 클러스터를 구성하는 리소스를 생성하고 설정
 
 # creating VPC
 module "VPC" {

@@ -1,5 +1,18 @@
+# 아래 구성을 통해 퍼블릭 서브넷에서 인터넷에 액세스하고 프라이빗 서브넷에서 인터넷을 통해 외부와 통신할 수 있도록 구성함
 
-# allocate elastic ip. this eip will be used for the nat-gateway in the public subnet pub-sub-1-a
+# [리소스]
+# aws_eip: Elastic IP (EIP)를 할당하는 리소스입니다. 두 개의 EIP가 생성되며, 각각 NAT 게이트웨이에 연결됩니다. 각 EIP는 고유한 태그를 가지고 있습니다.
+# aws_nat_gateway: NAT 게이트웨이를 생성하는 리소스입니다. NAT 게이트웨이는 퍼블릭 서브넷에 생성됩니다. 각 NAT 게이트웨이는 해당하는 EIP와 연결되며, 인터넷 게이트웨이에 의존성이 있습니다.
+# aws_route_table: 라우팅 테이블을 생성하는 리소스입니다. 각 라우팅 테이블은 프라이빗 서브넷을 위한 것이며, 해당하는 NAT 게이트웨이를 통해 인터넷에 액세스할 수 있도록 구성됩니다.
+# aws_route_table_association: 서브넷과 라우팅 테이블을 연결하는 리소스입니다. 각각의 프라이빗 서브넷은 해당하는 라우팅 테이블과 연결되어야 합니다.
+
+# [코드 흐름]
+# 먼저, 두 개의 Elastic IP (EIP)가 생성되고 각각 NAT 게이트웨이에 할당됩니다.
+# 그런 다음, 두 개의 NAT 게이트웨이가 각각의 퍼블릭 서브넷에 생성됩니다. 각 NAT 게이트웨이는 해당하는 EIP와 연결됩니다.
+# 라우팅 테이블이 생성되고, 각각의 라우팅 테이블은 NAT 게이트웨이를 통한 인터넷 액세스를 허용하는 라우트가 추가됩니다.
+# 각각의 프라이빗 서브넷이 해당하는 라우팅 테이블과 연결됩니다.
+
+
 resource "aws_eip" "EIP-NAT-GW-A" {
   vpc = true
 
@@ -10,7 +23,7 @@ resource "aws_eip" "EIP-NAT-GW-A" {
 
 
 
-# allocate elastic ip. this eip will be used for the nat-gateway in the public subnet pub-sub-2-b
+
 resource "aws_eip" "EIP-NAT-GW-B" {
   vpc = true
 
@@ -20,7 +33,7 @@ resource "aws_eip" "EIP-NAT-GW-B" {
 }
 
 
-# create nat gateway in public subnet pub-sub-1-a
+
 resource "aws_nat_gateway" "NAT-GW-A" {
   allocation_id = aws_eip.EIP-NAT-GW-A.id
   subnet_id     = var.PUB_SUB_1_A_ID
@@ -29,11 +42,11 @@ resource "aws_nat_gateway" "NAT-GW-A" {
     Name = "NAT-GW-A"
   }
 
-  # to ensure proper ordering, it is recommended to add an explicit dependency
+
   depends_on = [var.IGW_ID]
 }
 
-# create nat gateway in public subnet pub-sub-2-b
+
 resource "aws_nat_gateway" "NAT-GW-B" {
   allocation_id = aws_eip.EIP-NAT-GW-B.id
   subnet_id     = var.PUB_SUB_2_B_ID
@@ -42,13 +55,12 @@ resource "aws_nat_gateway" "NAT-GW-B" {
     Name = "NAT-GW-B"
   }
 
-  # to ensure proper ordering, it is recommended to add an explicit dependency
-  # on the internet gateway for the vpc.
+
   depends_on = [var.IGW_ID]
 }
 
 
-# create private route table Pri-RT-A and add route through NAT-GW-A
+
 resource "aws_route_table" "Pri-RT-A" {
   vpc_id = var.VPC_ID
 
@@ -62,14 +74,14 @@ resource "aws_route_table" "Pri-RT-A" {
   }
 }
 
-# associate private subnet pri-sub-3-a with private route table Pri-RT-A
+
 resource "aws_route_table_association" "pri-sub-3-a-with-Pri-RT-A" {
   subnet_id      = var.PRI_SUB_3_A_ID
   route_table_id = aws_route_table.Pri-RT-A.id
 }
 
 
-# create private route table Pri-RT-B and add route through NAT-GW-B
+
 resource "aws_route_table" "Pri-RT-B" {
   vpc_id = var.VPC_ID
 
@@ -83,7 +95,7 @@ resource "aws_route_table" "Pri-RT-B" {
   }
 }
 
-# associate private subnet pri-sub-4-b with private route Pri-RT-B
+
 resource "aws_route_table_association" "pri-sub-5-a-with-Pri-RT-B" {
   subnet_id      = var.PRI_SUB_4_B_ID
   route_table_id = aws_route_table.Pri-RT-B.id
