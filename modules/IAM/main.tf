@@ -6,7 +6,7 @@
 # 이 역할은 Amazon EKS가 AWS 리소스에 액세스하고 Kubernetes 클러스터를 생성하는 데 필요한 권한을 제공
 resource "aws_iam_role" "eks_cluster_role" {
   # The name of the role
-  name = "${var.PROJECT_NAME}-EKS-role"
+  name = "${var.PROJECT_NAME}-EKS-role" #terraform.tfvars->PROJECT_NAME = "App-EKS"
 
   assume_role_policy = <<POLICY
 {
