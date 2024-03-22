@@ -15,13 +15,19 @@ resource "aws_eks_cluster" "eks" {
   # 역할은 EKS 제어 평면이 AWS API 작업을 수행할 수 있도록 권한을 부여
 
   version = "1.27"
+  #Kubernetes를 관리하는 AWS의 관리형 서비스로 버전이 따로 관리됨. 최적이 호환성을 위해 최신 버전 사용
 
   vpc_config {
     endpoint_private_access = false
     # 클러스터의 프라이빗 API 서버 엔드포인트를 사용할지 여부를 지정
+    # 클러스터 내부에서 AWS 서비스에 대한 엔드포인트가 비공개로 접근 가능한지를 결정
+    # false로 설정된 것은 클러스터 내부의 리소스가 AWS 서비스에 대한 엔드포인트에 직접 액세스할 수 없도록 하는 것
+    # 클러스터 내부의 리소스는 클러스터 외부 리소스 또는 퍼블릭 엔드포인트를 통해만 AWS 서비스에 액세스할 수있다
+
 
     endpoint_public_access = true
     # 클러스터의 퍼블릭 API 서버 엔드포인트를 사용할지 여부를 지정
+    # true로 설정된 것은 클러스터에 대한 퍼블릭 엔드포인트를 활성화하는 것으로, 클러스터를 외부에서도 액세스할 수 있도록하는것
 
     subnet_ids = [
       var.PUB_SUB_1_A_ID,
