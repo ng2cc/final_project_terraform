@@ -1,3 +1,4 @@
+# ELB 구성을 관리하기위한 IngressClassParams CRD 구성
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -169,6 +170,7 @@ status:
   conditions: []
   storedVersions: []
 ---
+# ELB v2 리소스 TargetGroupBinding의 구조를 정의, 서비스와 타겟그룹간 연결 설정
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -569,6 +571,7 @@ status:
   conditions: []
   storedVersions: []
 ---
+# 로드 밸런서 컨트롤러 서비스 계정 정의
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -578,6 +581,7 @@ metadata:
   name: aws-load-balancer-controller
   namespace: kube-system
 ---
+# 로드 밸런서 컨트롤러 Role 정의
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -603,6 +607,7 @@ rules:
   - update
   - patch
 ---
+# 로드밸런서 컨트롤러 ClusterRole, 클러스터 전역에서 AWS 로드 밸런서 컨트롤러가 필요로 하는 권한을 정의
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -752,6 +757,7 @@ rules:
   - patch
   - update
 ---
+# 로드 밸런서 컨트롤러의 리더 선출을 위한 RoleBinding을 정의
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -768,6 +774,7 @@ subjects:
   name: aws-load-balancer-controller
   namespace: kube-system
 ---
+# kube-system 네임스페이스 내의 aws-load-balancer-controller 서비스 계정을 aws-load-balancer-controller-role ClusterRole에 바인딩
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -783,6 +790,7 @@ subjects:
   name: aws-load-balancer-controller
   namespace: kube-system
 ---
+# 로드 밸런서 웹훅 서비스를 정의, 외부 포트 443 -> 내부 9443 연결
 apiVersion: v1
 kind: Service
 metadata:
@@ -798,6 +806,7 @@ spec:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: aws-load-balancer-controller
 ---
+# kube-system 네임스페이스 내에서 AWS 로드 밸런서 컨트롤러를 배포합니다. 이 컨트롤러는 ALB(로드 밸런서)를 생성하고 관리하는 역할을 담당
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -864,6 +873,7 @@ spec:
           defaultMode: 420
           secretName: aws-load-balancer-webhook-tls
 ---
+# 로드 밸런서 컨트롤러가 HTTPS 트래픽을 처리하는 데 사용되는 TLS 인증서를 관리
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -880,6 +890,7 @@ spec:
     name: aws-load-balancer-selfsigned-issuer
   secretName: aws-load-balancer-webhook-tls
 ---
+# cert-manager를 통해 AWS 로드 밸런서 컨트롤러에 필요한 self-signed TLS 인증서를 생성
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
@@ -890,6 +901,7 @@ metadata:
 spec:
   selfSigned: {}
 ---
+# admission controller를 구성, admission controller는 웹훅을 통해 Kubernetes API에 들어오는 요청을 변이시키는 역할
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
@@ -951,6 +963,7 @@ webhooks:
     - targetgroupbindings
   sideEffects: None
 ---
+# 웹훅 구성, 유효성 검사
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
@@ -1002,6 +1015,7 @@ webhooks:
     - ingresses
   sideEffects: None
 ---
+# Ingress 클래스의 특정 매개 변수를 설정하는 데 사용, alb Ingress 클래스에 대한 매개 변수를 정의하고 AWS 로드 밸런서 컨트롤러에 의해 참조
 apiVersion: elbv2.k8s.aws/v1beta1
 kind: IngressClassParams
 metadata:
@@ -1009,6 +1023,7 @@ metadata:
     app.kubernetes.io/name: aws-load-balancer-controller
   name: alb
 ---
+# 로드 밸런서 컨트롤러가 사용하는 Ingress 클래스를 정의하고 해당 클래스에 대한 매개 변수를 지정
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
