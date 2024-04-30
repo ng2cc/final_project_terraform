@@ -1,13 +1,13 @@
-# Terraform의 백엔드를 S3로 설정하는 코드
-terraform {
-  backend "s3" {
-    bucket         = "swordbillz"
-    key            = "backend/App-eks.tfstate"
-    region         = "ap-northeast-1"
-    dynamodb_table = "dynamoDB-state"
-    encrypt        = true # 추가: 상태 파일 암호화 활성화
-  }
-}
+# # Terraform의 백엔드를 S3로 설정하는 코드
+# terraform {
+#   backend "s3" {
+#     bucket         = "swordbillz"
+#     key            = "backend/App-eks.tfstate"
+#     region         = "ap-northeast-1"
+#     dynamodb_table = "dynamoDB-state"
+#     encrypt        = true # 추가: 상태 파일 암호화 활성화
+#   }
+# }
 
 # backend "s3": Terraform에게 백엔드로 S3를 사용할 것을 지시
 # key: S3 버킷 내에서 .tfstate 파일이 저장될 키를 지정

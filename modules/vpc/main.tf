@@ -122,3 +122,53 @@ resource "aws_subnet" "pri-sub-4-b" {
   }
 }
 
+resource "aws_subnet" "pri-sub-5-a" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = var.PRI_SUB_5_A_CIDR
+  availability_zone       = data.aws_availability_zones.available_zones.names[0]
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name                                        = "pri-sub-5-a"
+    "kubernetes.io/cluster/${var.PROJECT_NAME}" = "shared"
+    "kubernetes.io/role/internal-elb"           = 1
+  }
+}
+
+
+resource "aws_subnet" "pri-sub-6-b" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = var.PRI_SUB_6_B_CIDR
+  availability_zone       = data.aws_availability_zones.available_zones.names[1]
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name                                        = "pri-sub-6-b"
+    "kubernetes.io/cluster/${var.PROJECT_NAME}" = "shared"
+    "kubernetes.io/role/internal-elb"           = 1
+  }
+}
+
+resource "aws_subnet" "pri-sub-7-a" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = var.PRI_SUB_7_A_CIDR
+  availability_zone       = data.aws_availability_zones.available_zones.names[0]
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name = "pri-sub-7-a"
+
+  }
+}
+
+resource "aws_subnet" "pri-sub-8-b" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = var.PRI_SUB_8_B_CIDR
+  availability_zone       = data.aws_availability_zones.available_zones.names[1]
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name = "pri-sub-8-b"
+
+  }
+}

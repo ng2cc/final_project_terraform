@@ -44,6 +44,11 @@ resource "aws_iam_role_policy_attachment" "elastic_load_balancing_full_access" {
   role       = aws_iam_role.eks_cluster_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "eks_worker_node_policy_attachment" {
+  role       = aws_iam_role.eks_cluster_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+}
+
 
 # 하위 나머지 코드 부분은 EKS 노드 그룹에 필요한 IAM 역할과 정책을 정의하고, 해당 역할에 정책을 연결하는데 사용됩니다.
 # 이러한 정책은 EKS 노드 그룹이 필요한 권한을 갖도록 합니다.

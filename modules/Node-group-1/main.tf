@@ -1,7 +1,7 @@
 # Terraform을 사용하여 AWS에서 EKS 노드 그룹을 생성하는 것
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_node_group
 
-resource "aws_eks_node_group" "nodes_general" {
+resource "aws_eks_node_group" "nodes_1" {
 
   cluster_name = var.EKS_CLUSTER_NAME
   # AWS에서 EKS 노드 그룹을 정의하는 Terraform 리소스를 시작
@@ -52,8 +52,9 @@ resource "aws_eks_node_group" "nodes_general" {
   instance_types = ["t3.small"]
 
   labels = {
-    role = "${var.EKS_CLUSTER_NAME}-Node-group-role",
-    name = "${var.EKS_CLUSTER_NAME}-NG"
+    role        = "${var.EKS_CLUSTER_NAME}-Node-group-role-1",
+    name        = "${var.EKS_CLUSTER_NAME}-NG-1"
+    "node-type" = "web" # 여기에 node-type을 추가합니다.
   }
 
 

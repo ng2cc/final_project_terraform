@@ -33,7 +33,9 @@ resource "aws_eks_cluster" "eks" {
       var.PUB_SUB_1_A_ID,
       var.PUB_SUB_2_B_ID,
       var.PRI_SUB_3_A_ID,
-      var.PRI_SUB_4_B_ID
+      var.PRI_SUB_4_B_ID,
+      var.PRI_SUB_5_A_ID,
+      var.PRI_SUB_6_B_ID
     ]
   }
   # 클러스터가 속할 서브넷들의 ID를 지정합니다. 최소한 두 개의 서로 다른 가용 영역에 속한 서브넷이여야함

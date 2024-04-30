@@ -80,6 +80,15 @@ resource "aws_route_table_association" "pri-sub-3-a-with-Pri-RT-A" {
   route_table_id = aws_route_table.Pri-RT-A.id
 }
 
+resource "aws_route_table_association" "pri-sub-5-a-with-Pri-RT-A" {
+  subnet_id      = var.PRI_SUB_5_A_ID
+  route_table_id = aws_route_table.Pri-RT-A.id
+}
+resource "aws_route_table_association" "pri-sub-7-a-with-Pri-RT-A" {
+  subnet_id      = var.PRI_SUB_7_A_ID
+  route_table_id = aws_route_table.Pri-RT-A.id
+}
+
 
 
 resource "aws_route_table" "Pri-RT-B" {
@@ -96,7 +105,17 @@ resource "aws_route_table" "Pri-RT-B" {
 }
 
 
-resource "aws_route_table_association" "pri-sub-5-a-with-Pri-RT-B" {
+resource "aws_route_table_association" "pri-sub-4-b-with-Pri-RT-B" {
   subnet_id      = var.PRI_SUB_4_B_ID
   route_table_id = aws_route_table.Pri-RT-B.id
+}
+
+resource "aws_route_table_association" "pri-sub-6-B-with-Pri-RT-A" {
+  subnet_id      = var.PRI_SUB_6_B_ID
+  route_table_id = aws_route_table.Pri-RT-A.id
+}
+
+resource "aws_route_table_association" "pri-sub-8-B-with-Pri-RT-A" {
+  subnet_id      = var.PRI_SUB_8_B_ID
+  route_table_id = aws_route_table.Pri-RT-A.id
 }

@@ -5,3 +5,7 @@ variable "IGW_ID" {}
 variable "VPC_ID" {}
 variable "PRI_SUB_3_A_ID" {}
 variable "PRI_SUB_4_B_ID" {}
+variable "PRI_SUB_5_A_ID" {}
+variable "PRI_SUB_6_B_ID" {}
+variable "PRI_SUB_7_A_ID" {}
+variable "PRI_SUB_8_B_ID" {}
